@@ -13,14 +13,23 @@ namespace UtilityBot.Controllers
     /// </summary>
     public class TextMessageController : BaseController
     {
+        private IService _messageLengthCalculator;
+        private IService _sumCalculator;
+
         public override string CallbackMessage { get; set; }
             = "Получено текстовое сообщение";
 
         public TextMessageController(
             ITelegramBotClient telegramBotClient,
             AppConfig appConfig,
-            IStorage storage
-            ) : base(telegramBotClient, appConfig, storage) { }
+            IStorage storage,
+            IService messageLengthCalculator,
+            IService sumCalculator
+            ) : base(telegramBotClient, appConfig, storage) 
+        {
+            _messageLengthCalculator = messageLengthCalculator;
+            _sumCalculator = sumCalculator;
+        }
 
         public override async Task Handle(Message message, CancellationToken cancellationToken)
         {
@@ -52,18 +61,12 @@ namespace UtilityBot.Controllers
                     switch (selection)
                     {
                         case ButtonsEnum.MessageLength:
-                            MessageLengthCalculator messageLength = 
-                                new MessageLengthCalculator(message.Text);
-
-                            CallbackMessage = messageLength.GetResult();
+                            CallbackMessage = _messageLengthCalculator.GetResult(message.Text);
 
                             break;
 
                         case ButtonsEnum.SumCalculator:
-                            SumCalculator sumCalculator = 
-                                new SumCalculator(message.Text);
-
-                            CallbackMessage = sumCalculator.GetResult();
+                            CallbackMessage = _sumCalculator.GetResult(message.Text);
 
                             break;
                     }

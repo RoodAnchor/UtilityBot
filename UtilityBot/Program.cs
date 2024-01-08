@@ -36,6 +36,8 @@ namespace UtilityBot
             services.AddSingleton<AppConfig>(appConfig);
 
             services.AddSingleton<IStorage, SessionStorage>();
+            services.AddSingleton<IService, MessageLengthCalculator>();
+            services.AddSingleton<IService, SumCalculator>();
 
             services.AddTransient<DefaultMessageController>();
             services.AddTransient<TextMessageController>();

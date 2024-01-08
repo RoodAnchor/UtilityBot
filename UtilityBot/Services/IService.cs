@@ -15,6 +15,6 @@ namespace UtilityBot.Services
         /// Метод получает результат работы сервиса
         /// </summary>
         /// <returns>Сообщение от сервиса</returns>
-        public String GetResult();
+        public String GetResult(String input);
     }
 }

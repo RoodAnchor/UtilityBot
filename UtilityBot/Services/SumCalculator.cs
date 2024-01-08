@@ -11,22 +11,13 @@ namespace UtilityBot.Services
     /// </summary>
     public class SumCalculator : IService
     {
-        #region Fields
-        private String _message;
-        #endregion Fields
-
-        #region Constructors
-        public SumCalculator(String message) =>
-            _message = message;
-        #endregion Constructors
-
         #region Methods
-        public String GetResult()
+        public String GetResult(String input)
         {
             List<Int32> ints = new List<Int32>();
             String validationMessage;
 
-            if (TryParseMessage(out ints, out validationMessage))
+            if (TryParseMessage(input, out ints, out validationMessage))
                 return $"{String.Join(" + ", ints)} = {ints.Sum()}";
 
             return validationMessage;
@@ -40,11 +31,14 @@ namespace UtilityBot.Services
         /// результат преобразования</param>
         /// <param name="validationMessage">Сообщение о валидации значений</param>
         /// <returns>true - если всё ок, false - если есть ошибки</returns>
-        private Boolean TryParseMessage(out List<Int32> ints, out String validationMessage)
+        private Boolean TryParseMessage(
+            String input, 
+            out List<Int32> ints, 
+            out String validationMessage)
         {
             ints = new List<Int32>();
 
-            List<String> parts = _message.Split(' ')
+            List<String> parts = input.Split(' ')
                 .Where(x =>
                     !String.IsNullOrWhiteSpace(x) &&
                     !String.IsNullOrEmpty(x))
